@@ -1,5 +1,7 @@
+
+6.4.1-gamma1
+June 11, 2024
 NetLogo 6.4.0
-November 14, 2023
 NetLogo 6.3.0
 NetLogo 6.2.2
 NetLogo 6.2.1

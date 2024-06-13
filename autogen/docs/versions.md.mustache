@@ -4,21 +4,33 @@ For help running models made in old versions, see the
 [Transition Guide](transition.html).
 
 [TOC]
-## Version 6.4.1-gamma1 (September 2023)
+## Version 6.4.1-gamma1 (June 2024)
 
-### Bug Fixes and Changes
-- BehaviorSpace no longer produces a runtime error when the following conditions hold 1) the user specifies a *Run metrics when* reporter 2) the reporter is never true and 3) the user has specified both Table and Spreadsheet output.
+### Features and Changes
+- Auto-reload - new feature that makes NetLogo monitor currently
+opened nlogo file (and included nls files, if any) for external changes.
+When a change is detected, the nlogo file is reloaded.
+This feature can be enabled or disabled using the preferences dialog. It is disabled by default.
+- Recent files does not mix 2D and 3D models.
+- New primitive `home-directory` reports user's home directory,
+- Compiler optimization for `any turtles-on` and `any breeds-on`.
+- Runtime error dialog now requests user include a reproducible example.
+
+### Bug Fixes
+- BehaviorSpace no longer produces a runtime error when the following conditions hold
+1) the user specifies a *Run metrics when* reporter 2) the reporter is never true and
+3) the user has specified both Table and Spreadsheet output.
 - Leaving and returning to a "dirty" Code Tab no longer causes compilation.
 - Opening a separate code tab with compilation error no longer causes an exception.
 - Empty link monitor allows number typed in as an end value.
 - Multi-assign now works with BehaviorSpace.
 - Command tasks now jump to code on runtime error.
-  
+
 ### Extension Updates
 - The gogo extension supports the GoGo board 6.
 
 ### Documentation Updates
-
+- Link to book *An Introduction to Agent-Based Modeling* corrected.
 
 ### Models Library Changes
 

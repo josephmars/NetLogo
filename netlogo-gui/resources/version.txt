@@ -1,4 +1,4 @@
-6.4.1-gamma1
+NetLogo 6.4.1-gamma1
 June 11, 2024
 NetLogo 6.4.0
 NetLogo 6.3.0

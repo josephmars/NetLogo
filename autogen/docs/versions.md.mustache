@@ -4,40 +4,80 @@ For help running models made in old versions, see the
 [Transition Guide](transition.html).
 
 [TOC]
-## Version 6.4.1-gamma1 (June 2024)
+## Version 6.5.0-future (? 2024)
+
+A major change in this release is an update to the look and feel of the NetLogo Application
+### Changes to the NetLogo look and feel
+- We now use FlatLaf - a modern open-source cross-platform Look and Feel for Java Swing desktop applications.
+- Widgets have a flat modern look with a new color scheme.
+- The View has slightly rounded edges.
+- The widget pull down menu is easier to read.
+- The Interface Tool Bar has been simplified.
+- Images in the documentation, tutorials, and the book *An Introduction to Agent-Based Modeling*
+have all been updated.
+- Models in the Library have been updated.
+- (potential) New iconography for observer, turtle, patch and link has been introduced.
+- (potential) There are new tools to align widgets.
+- (potential) The Info Tab ...
+- (potential) Code Tabs ...
 
 ### Features and Changes
-- Auto-reload - new feature that makes NetLogo monitor currently
-opened nlogo file (and included `nls` files, if any) for external changes.
-When a change is detected, the nlogo file is reloaded.
+- Auto-reload - a new feature that reloads the currently opened model file (and any included `nls` files
+if changes have been made outside the NetLogo application. 
 This feature can be enabled or disabled using the preferences dialog. It is disabled by default.
-- Recent files does not mix 2D and 3D models.
-- New primitive `home-directory` reports user's home directory,
+- There are separate recent files lists for 2D and 3D models.
+- The new primitive `home-directory` reports the user's home directory.
+- There is a new optional argument that allows default input values to be specified for the `user-input` primitive.
 - Compiler optimization for `any turtles-on` and `any breeds-on`.
-- Runtime error dialog now requests user include a reproducible example.
+- The runtime error dialog now requests that the user include a reproducible example.
+- BehaviorSpace error messages and documentation have been improved.
+- A tilde may be used to represent the home directory for included file paths on MacOS and Linux.
+- There is a new preference option that will prevent compilation errors from stealing focus from the current tab.
+The default behavior remains the same.
+- (potential) When the Code Tab is separate it NetLogo displays a full menu.
 
 ### Bug Fixes
 - BehaviorSpace no longer produces a runtime error when the following conditions hold
 1) the user specifies a *Run metrics when* reporter 2) the reporter is never true and
 3) the user has specified both Table and Spreadsheet output.
+- BehaviorSpace gives a more meaningful error when output files are open in another program in Windows.
+- Multi-assign now works with BehaviorSpace.
+- The Code Tab "Indent Automatically" selection now persists between sessions.
 - Leaving and returning to a "dirty" Code Tab no longer causes compilation.
 - Opening a separate code tab that leads to a compilation error no longer causes an exception.
-- Empty link monitor allows number typed in as an end value.
-- Multi-assign now works with BehaviorSpace.
+- A link monitor with no associated links allows the link ends to be specified using a who value.
 - Command tasks now jump to code on runtime error.
+- A clearer error message is produced when a constant such as `e` or `pi` is used as a global variable name.
+- Included file code is now merged in when a model is exported as NetLogo Web.
+- Code in included files is properly compiled whether or not the file is saved or closed without saving.
+- The Tools menu correctly displays the Show/Hide Command Center option under all circumstances.
+- The process of selecting a log directory is now smoother, allowing the user to create a path
+that doesn't currently exist and ensuring that the specified path exists when the model loads.
+- Creating input widgets without assigning a value no longer causes focus problems.
+- When brackets are missing after an `__includes` statement an error message is produced, there is no uncaught exception.
+- The missing reporter `autoplot?` was restored.
+- An input box will reject an invalid value type  - for example a string when a number is required.
 
-### Extension Updates
+## Extension Updates
 - The gogo extension supports the GoGo board 6.
 
 ### Documentation Updates
-- Link to book *An Introduction to Agent-Based Modeling* corrected.
+- The link to the textbook *An Introduction to Agent-Based Modeling* is now correct.
 
 ### Models Library Changes
 
 #### New Sample Models:
 
+- Chloroplasts and Food
 
 #### Sample Model Changes
+
+- The `rewire-me` procedure in the Small Worlds model is properly documented as a link procedure.
+- The patch label when the bar is crowded in the El Farol model is now yellow.
+- The Discrete Event Mousetrap has minor improvements.
+- The correct label is used after `hatch`ing in the Plant Speciation model.
+- There is a reference to new research  on why moths circle artificial lights in the Moths model, 
+as well as a related new challenge in the EXTENDING THE MODEL section.
 
 ## Version 6.4.0 (November 2023)
 

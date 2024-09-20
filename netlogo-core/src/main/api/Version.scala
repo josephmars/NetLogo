@@ -120,6 +120,7 @@ trait Version {
   , "6.2" -> Seq("6.1", "6.0")
   , "6.3" -> Seq("6.2", "6.1", "6.0")
   , "6.4" -> Seq("6.3", "6.2", "6.1", "6.0")
+  , "7.0" -> Seq("6.4","6.3", "6.2", "6.1", "6.0")  // won't be compatible after file format changes
   )
 
   private def versionNumber(v: String) =

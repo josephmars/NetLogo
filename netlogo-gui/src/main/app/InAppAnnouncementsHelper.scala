@@ -2,9 +2,14 @@ package org.nlogo.app
 
 import org.json.simple.parser.{JSONParser, ParseException}
 import org.json.simple.{JSONArray, JSONObject}
+import org.nlogo.app.common.FindDialog
+import org.nlogo.app.infotab.InfoFormatter
+
 import java.awt._
 import javax.swing._
 import org.nlogo.core.I18N
+
+import java.awt.event.{FocusEvent, FocusListener}
 import scala.io.Source
 import scala.collection.immutable.List
 
@@ -38,6 +43,8 @@ object InAppAnnouncementsHelper {
           JsonObject(eventId, date, title, fullText)
         }
       }.toList
+        // Sort the list by eventId in descending order
+        .sortBy(_.eventId)(Ordering[Int].reverse)
     } catch {
       case e: ParseException =>
         throw new Exception(s"Error parsing JSON: ${e.getMessage}",e)
@@ -76,21 +83,28 @@ object InAppAnnouncementsHelper {
 
       // Format the list of JsonObjects into a string
       val formattedString = formatJsonObjectList(jsonObjectList)
+      val html  = InfoFormatter.toInnerHtml(formattedString)
 
       if (!jsonContent.trim.isEmpty) {
-        println(formattedString) // Debug: Print formatted string
 
-        // Show the JSON content in a modal dialog with JTextArea
+        // Show the JSON content in a modal dialog with JEditorPane
         SwingUtilities.invokeLater(() => {
-          // Create a JTextArea
-          val textArea = new JTextArea(20, 45)
-          textArea.setText(formattedString)
-          textArea.setEditable(false)
-          // Scroll to the top line
-          textArea.setCaretPosition(0)  // Set caret to the start of the text
+          val editorPane: JEditorPane = new JEditorPane { self =>
+            addFocusListener(new FocusListener {
+              def focusGained(fe: FocusEvent): Unit = { FindDialog.watch(self) }
+              def focusLost(fe: FocusEvent): Unit = { if (!fe.isTemporary) FindDialog.dontWatch(self) }
+            })
+            setDragEnabled(false)
+            setEditable(false)
+            setContentType("text/html")
+            setOpaque(false)  // Make sure JEditorPane is transparent for scrollPane
+            setText(html)
+            setCaretPosition(0)
+          }
 
-          // Create a JScrollPane to wrap the JTextArea
-          val scrollPane = new JScrollPane(textArea)
+          // Create a JScrollPane to wrap the JEditorPane
+          val scrollPane = new JScrollPane(editorPane)
+          scrollPane.setPreferredSize(new Dimension(500, 400))  // Set preferred size for scroll area
 
           // Create a JCheckBox
           val checkbox = new JCheckBox(I18N.gui.get("dialog.interface.newsNotificationDoNotShowAgain"))
@@ -122,7 +136,6 @@ object InAppAnnouncementsHelper {
           }
         })
       }
-
     } catch {
       case e: Exception => throw new Exception(s"Error in showJsonInDialog: ${e.getMessage}",e)
     }

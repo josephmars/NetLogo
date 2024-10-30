@@ -7,6 +7,7 @@ import org.nlogo.app.infotab.InfoFormatter
 
 import java.awt._
 import javax.swing._
+import java.util.prefs.{Preferences => JPreferences}
 import org.nlogo.core.I18N
 
 import java.awt.event.{FocusEvent, FocusListener}
@@ -17,6 +18,7 @@ import scala.collection.immutable.List
 case class JsonObject(eventId: Int, date: String, title: String, fullText: String)
 
 object InAppAnnouncementsHelper {
+  val lastSeenEventIdKey: String = "lastSeenEventId"  // The key for the most recently seen event-id
 
   def parseJsonToList(jsonContent: String): List[JsonObject] = {
     try {
@@ -76,13 +78,23 @@ object InAppAnnouncementsHelper {
 
   def showJsonInDialog(): Unit = {
     val url = "https://ccl.northwestern.edu/netlogo/announce-test.json"
+    val prefs = JPreferences.userNodeForPackage(getClass)
 
     try {
       val jsonContent = fetchJsonFromUrl(url)
       val jsonObjectList = parseJsonToList(jsonContent)
-
+      println(s"prefs is ${prefs}\n\n")
       // Format the list of JsonObjects into a string
       val formattedString = formatJsonObjectList(jsonObjectList)
+      val lastSeenEventId = prefs.getInt(lastSeenEventIdKey, -1); // Returns -1 if "event-id" is not found
+      println(s"lastSeenEventId: $lastSeenEventId, head of the list: ${jsonObjectList.head.eventId}")
+      if(jsonObjectList.head.eventId > lastSeenEventId){
+        println(s"Show this ${jsonObjectList.head.eventId}")
+      }
+      else {
+        println(s"Don't show this  ${jsonObjectList.head.eventId}")
+        return
+      }
       val html  = InfoFormatter.toInnerHtml(formattedString)
 
       if (!jsonContent.trim.isEmpty) {
@@ -118,7 +130,7 @@ object InAppAnnouncementsHelper {
           val options: Array[AnyRef] = Array(I18N.gui.get("common.buttons.ok"))
 
           // Show the JOptionPane dialog with only an OK button
-          val result = JOptionPane.showOptionDialog(
+          JOptionPane.showOptionDialog(
             null,                     // Parent component
             panel,                    // Content to display
             I18N.gui.get("dialog.interface.newsNotificationTitle"),  // Dialog title
@@ -130,9 +142,10 @@ object InAppAnnouncementsHelper {
           )
 
           // Handle user input after pressing OK
-          if (result == 0) { // 0 is the index for "OK"
-            val doNotShowAgain = checkbox.isSelected
+          val doNotShowAgain = checkbox.isSelected
+          if (doNotShowAgain) {
             println(s"Do not show again: $doNotShowAgain")
+            prefs.putInt("lastSeenEventId", jsonObjectList.head.eventId)
           }
         })
       }

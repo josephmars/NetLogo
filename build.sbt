@@ -401,3 +401,4 @@ lazy val behaviorsearchProject: Project =
   project.in(file("behaviorsearch"))
     .dependsOn(netlogo % "test-internal->test;compile-internal->compile")
     .settings(description := "subproject of NetLogo")
+
